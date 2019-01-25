@@ -1,0 +1,30 @@
+install-module AzureRM
+
+Import-Module -Name PowerShellGet -ErrorAction Stop
+Import-Module -Name PackageManagement -ErrorAction Stop
+Get-PSRepository -Name "PSGallery"
+Register-PsRepository -Default
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+# Install the AzureRM.Bootstrapper module. Select Yes when prompted to install NuGet
+Install-Module -Name AzureRm.BootStrapper
+# Install and import the API Version Profile required by Azure Stack into the current PowerShell session.
+Use-AzureRmProfile -Profile 2018-03-01-hybrid -Force
+Install-Module -Name AzureStack -RequiredVersion 1.5.0
+
+# Create variables to store the storage account name and the storage account SKU information
+$StorageAccountName = "mystorageaccount"
+$SkuName = "Standard_LRS"
+# Create a new storage account
+$StorageAccount = New-AzureRMStorageAccount `
+  -Location $location `
+  -ResourceGroupName $ResourceGroupName `
+  -Type $SkuName `
+  -Name $StorageAccountName
+Set-AzureRmCurrentStorageAccount `
+  -StorageAccountName $storageAccountName `
+  -ResourceGroupName $resourceGroupName
+# Create a storage container to store a virtual machine image
+$containerName = 'osdisks'
+$container = New-AzureStorageContainer `
+  -Name $containerName `
+  -Permission Blob

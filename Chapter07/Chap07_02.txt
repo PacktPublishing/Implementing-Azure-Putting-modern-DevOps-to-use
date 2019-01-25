@@ -1,0 +1,41 @@
+# Create variables to store the storage account name and the storage account SKU information
+$StorageAccountName = "mystorageaccount"
+$SkuName = "Standard_LRS"
+# Create a new storage account
+$StorageAccount = New-AzureRMStorageAccount `
+  -Location $location `
+  -ResourceGroupName $ResourceGroupName `
+  -Type $SkuName `
+  -Name $StorageAccountName
+Set-AzureRmCurrentStorageAccount `
+  -StorageAccountName $storageAccountName `
+  -ResourceGroupName $resourceGroupName
+# Create a storage container to store a virtual machine image
+$containerName = 'osdisks'
+$container = New-AzureStorageContainer `
+  -Name $containerName `
+  -Permission Blob
+
+
+az cloud register \ 
+  -n AzureStackUser \ 
+  --endpoint-resource-manager "https://management.local.azurestack.external" \ 
+  --suffix-storage-endpoint "local.azurestack.external" \ 
+  --suffix-keyvault-dns ".vault.local.azurestack.external" \ 
+  --endpoint-vm-image-alias-doc <URI of the document which contains virtual machine image aliases>
+az cloud set \
+  -n AzureStackUser
+
+az login \
+  -u <Active directory global administrator or user account. For example: username@<aadtenant>.onmicrosoft.com> \
+  --tenant <Azure Active Directory Tenant name. For example: myazurestack.onmicrosoft.com>
+
+az group create --name myResourceGroup --location local
+az vm create \
+  --resource-group "myResourceGroup" \
+  --name "myVM" \
+  --image "Win2016Datacenter" \
+  --admin-username "Demouser" \
+  --admin-password "Demouser@123" \
+  --use-unmanaged-disk \
+  --location local
