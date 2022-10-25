@@ -18,3 +18,7 @@ By the end of this Learning Path, you’ll be able to create a highly secure, fa
 * Build Azure SQL databases with Code First Migrations
 * Integrate client applications with Web API and SignalR on Azure
 * Implement the Azure Active Directory (Azure AD) across the entire system
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781788833936">https://packt.link/free-ebook/9781788833936 </a> </p>
